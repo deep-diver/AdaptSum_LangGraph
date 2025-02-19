@@ -1,5 +1,3 @@
-import os
-
 from langgraph.graph import StateGraph
 from langgraph.checkpoint.memory import MemorySaver
 
@@ -8,10 +6,7 @@ from graph import compile_graph
 def stream_graph_updates(graph: StateGraph, user_input: str, config: dict):
     messages = [{"role": "user", "content": user_input}]
     
-    for event in graph.stream(
-        {"messages": messages},
-        config
-    ):
+    for event in graph.stream({"messages": messages}, config):
         for value in event.values():
             if "summary" in value:
                 # print(value["summary"])
