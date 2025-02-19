@@ -1,2 +1,4 @@
 langgraph
 langchain-google-genai
+grpcio==1.67.1
+grpcio-status==1.67.1
