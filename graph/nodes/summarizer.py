@@ -1,6 +1,6 @@
 from string import Template
 from state import State
-from .utils import llm
+from .llms import llm
 
 def summarizer(state: State):
     summary_prompt_template = Template("""Below is the initial summary of our conversation. 
@@ -23,16 +23,15 @@ Summary Guide:
 """)
 
     last_conversation = f"""USER: {state["messages"][-2].content}\n\nASSISTANT: {state["messages"][-1].content}"""
+    
+    prev_summary = ""
     if "summary" in state:
         prev_summary = state['summary'][0]
-    else:
-        prev_summary = ""
     
     summary_prompt = summary_prompt_template.safe_substitute(
         previous_summary=prev_summary,
         latest_conversation=last_conversation
     )
-    # print(summary_prompt)
 
     summary_msg = llm.invoke(summary_prompt).content
-    return {"summary": [summary_msg]}
+    return {"new_summary": [summary_msg]}
